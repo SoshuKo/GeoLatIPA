@@ -77,10 +77,15 @@
 
 <script>
   const table = [
+    // 放出音（優先）
     ['წ', "ts’", 'tsʼ'], ['ჭ', "ch’", 'tʃʼ'], ['ყ', "q’", 'qʼ'],
     ['ტ', "t’", 'tʼ'], ['კ', "k’", 'kʼ'], ['პ', "p’", 'pʼ'],
+
+    // 有気音
     ['ჩ', 'ch', 'tʃ'], ['ც', 'ts', 'ts'], ['ძ', 'dz', 'dz'],
     ['ხ', 'kh', 'x'], ['ჟ', 'zh', 'ʒ'], ['ღ', 'gh', 'ɣ'], ['შ', 'sh', 'ʃ'],
+
+    // その他
     ['ჯ', 'j', 'dʒ'], ['თ', "t", 'tʰ'], ['ფ', 'p', 'pʰ'], ['ქ', 'k', 'kʰ'],
     ['ა', 'a', 'ɑ'], ['ბ', 'b', 'b'], ['გ', 'g', 'g'], ['დ', 'd', 'd'], ['ე', 'e', 'ɛ'],
     ['ვ', 'v', 'v'], ['ზ', 'z', 'z'], ['ი', 'i', 'i'], ['ლ', 'l', 'l'],
@@ -93,24 +98,26 @@
     let output = input;
 
     if (mode === 'georgian') {
-      // IPAやLatinをGeorgianへ：長いものから順に処理
-      // ① IPA → Georgian
-      table.sort((a, b) => b[2].length - a[2].length).forEach(([geo, lat, ipa]) => {
-        output = output.replaceAll(ipa, geo);
+      // IPA → Georgian：文字列長が長い順に処理（tʃʼ, tʃ）
+      [...table].sort((a, b) => b[2].length - a[2].length).forEach(([geo, lat, ipa]) => {
+        output = output.split(ipa).join(geo);
       });
-      // ② Latin → Georgian
-      table.sort((a, b) => b[1].length - a[1].length).forEach(([geo, lat, ipa]) => {
-        output = output.replaceAll(lat, geo);
+
+      // Latin → Georgian：長い順（ch’, ch, etc）
+      [...table].sort((a, b) => b[1].length - a[1].length).forEach(([geo, lat, ipa]) => {
+        output = output.split(lat).join(geo);
       });
+
     } else if (mode === 'latin') {
-      // Georgian → Latin：文字単位処理
+      // Georgian → Latin（順番でOK）
       table.forEach(([geo, lat]) => {
-        output = output.replaceAll(geo, lat);
+        output = output.split(geo).join(lat);
       });
+
     } else if (mode === 'ipa') {
-      // Georgian → IPA：文字単位処理
+      // Georgian → IPA（順番でOK）
       table.forEach(([geo, _, ipa]) => {
-        output = output.replaceAll(geo, ipa);
+        output = output.split(geo).join(ipa);
       });
     }
 
