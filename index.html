@@ -65,18 +65,16 @@
 </head>
 <body>
   <div class="container">
-    <h1>Georgian ⇄ Latin ⇄ IPA Converter</h1>
-    <textarea id="inputText" placeholder="Enter Georgian, Latin, or IPA..."></textarea>
+    <h1>Georgian → Latin / IPA Converter</h1>
+    <textarea id="inputText" placeholder="Enter Georgian text..."></textarea>
     <div class="button-group">
-      <button onclick="convert('georgian')">To Georgian</button>
-      <button onclick="convert('latin')">To Latin</button>
-      <button onclick="convert('ipa')">To IPA</button>
+      <button onclick="convert('latin')">Convert to Latin</button>
+      <button onclick="convert('ipa')">Convert to IPA</button>
     </div>
     <textarea id="outputText" readonly placeholder="Output..."></textarea>
   </div>
 
 <script>
-  // Georgian → Latin / IPA
   const fromGeorgianTable = [
     ['წ', 'ts’', 'tsʼ'], ['ჭ', 'ch’', 'tʃʼ'], ['ყ', 'q’', 'qʼ'],
     ['ტ', 't’', 'tʼ'], ['კ', 'k’', 'kʼ'], ['პ', 'p’', 'pʼ'],
@@ -89,48 +87,17 @@
     ['ს', 's', 's'], ['უ', 'u', 'u'], ['ჰ', 'h', 'h']
   ];
 
-  // Latin → Georgian / IPA
-  const fromLatinTable = [
-    ['ts’', 'წ', 'tsʼ'], ['ch’', 'ჭ', 'tʃʼ'], ['q’', 'ყ', 'qʼ'],
-    ['t’', 'ტ', 'tʼ'], ['k’', 'კ', 'kʼ'], ['p’', 'პ', 'pʼ'],
-    ['ch', 'ჩ', 'tʃ'], ['ts', 'ც', 'ts'], ['dz', 'ძ', 'dz'],
-    ['kh', 'ხ', 'x'], ['zh', 'ჟ', 'ʒ'], ['gh', 'ღ', 'ɣ'], ['sh', 'შ', 'ʃ'],
-    ['j', 'ჯ', 'dʒ'], ['t', 'თ', 'tʰ'], ['p', 'ფ', 'pʰ'], ['k', 'ქ', 'kʰ'],
-    ['a', 'ა', 'ɑ'], ['b', 'ბ', 'b'], ['g', 'გ', 'g'], ['d', 'დ', 'd'], ['e', 'ე', 'ɛ'],
-    ['v', 'ვ', 'v'], ['z', 'ზ', 'z'], ['i', 'ი', 'i'], ['l', 'ლ', 'l'],
-    ['m', 'მ', 'm'], ['n', 'ნ', 'n'], ['o', 'ო', 'ɔ'], ['r', 'რ', 'r'],
-    ['s', 'ს', 's'], ['u', 'უ', 'u'], ['h', 'ჰ', 'h']
-  ];
-
-  // IPA → Georgian / Latin
-  const fromIPATable = [
-    ['tsʼ', 'წ', 'ts’'], ['tʃʼ', 'ჭ', 'ch’'], ['qʼ', 'ყ', 'q’'],
-    ['tʼ', 'ტ', 't’'], ['kʼ', 'კ', 'k’'], ['pʼ', 'პ', 'p’'],
-    ['tʃ', 'ჩ', 'ch'], ['ts', 'ც', 'ts'], ['dz', 'ძ', 'dz'],
-    ['x', 'ხ', 'kh'], ['ʒ', 'ჟ', 'zh'], ['ɣ', 'ღ', 'gh'], ['ʃ', 'შ', 'sh'],
-    ['dʒ', 'ჯ', 'j'], ['tʰ', 'თ', 't'], ['pʰ', 'ფ', 'p'], ['kʰ', 'ქ', 'k'],
-    ['ɑ', 'ა', 'a'], ['b', 'ბ', 'b'], ['g', 'გ', 'g'], ['d', 'დ', 'd'], ['ɛ', 'ე', 'e'],
-    ['v', 'ვ', 'v'], ['z', 'ზ', 'z'], ['i', 'ი', 'i'], ['l', 'ლ', 'l'],
-    ['m', 'მ', 'm'], ['n', 'ნ', 'n'], ['ɔ', 'ო', 'o'], ['r', 'რ', 'r'],
-    ['s', 'ს', 's'], ['u', 'უ', 'u'], ['h', 'ჰ', 'h']
-  ];
-
   function convert(mode) {
     let input = document.getElementById("inputText").value;
     let output = input;
 
-    if (mode === 'georgian') {
-      fromGeorgianTable.forEach(([geo, lat, ipa]) => {
+    if (mode === 'latin') {
+      fromGeorgianTable.forEach(([geo, lat]) => {
         output = output.split(geo).join(lat);
       });
-    } else if (mode === 'latin') {
-      // 長い順に
-      [...fromLatinTable].sort((a, b) => b[0].length - a[0].length).forEach(([lat, geo, ipa]) => {
-        output = output.split(lat).join(geo);
-      });
     } else if (mode === 'ipa') {
-      [...fromIPATable].sort((a, b) => b[0].length - a[0].length).forEach(([ipa, geo, lat]) => {
-        output = output.split(ipa).join(geo);
+      fromGeorgianTable.forEach(([geo, _, ipa]) => {
+        output = output.split(geo).join(ipa);
       });
     }
 
