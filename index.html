@@ -3,19 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Georgian Transcription Converter</title>
+  <title>Georgian → Latin / IPA Converter</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #fdfbfb, #ebedee);
       padding: 40px;
       margin: 0;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-      font-size: 2em;
-      margin-bottom: 30px;
     }
     .container {
       max-width: 700px;
@@ -24,6 +18,10 @@
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
     }
     textarea {
       width: 100%;
@@ -40,13 +38,13 @@
       border-color: #0077cc;
       outline: none;
     }
-    .button-group {
+    .button-group, .keyboard {
       text-align: center;
       margin-bottom: 20px;
     }
     button {
-      padding: 12px 24px;
-      margin: 0 10px;
+      padding: 10px 18px;
+      margin: 5px;
       font-size: 1em;
       border: none;
       border-radius: 8px;
@@ -59,7 +57,12 @@
       background-color: #005fa3;
     }
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
+    }
+    .keyboard button {
+      background-color: #e0e0e0;
+      color: #333;
+      font-family: 'Segoe UI', sans-serif;
     }
   </style>
 </head>
@@ -67,42 +70,64 @@
   <div class="container">
     <h1>Georgian → Latin / IPA Converter</h1>
     <textarea id="inputText" placeholder="Enter Georgian text..."></textarea>
+
+    <div class="keyboard" id="georgianKeyboard"></div>
+
     <div class="button-group">
       <button onclick="convert('latin')">Convert to Latin</button>
       <button onclick="convert('ipa')">Convert to IPA</button>
     </div>
+
     <textarea id="outputText" readonly placeholder="Output..."></textarea>
   </div>
 
-<script>
-  const fromGeorgianTable = [
-    ['წ', 'ts’', 'tsʼ'], ['ჭ', 'ch’', 'tʃʼ'], ['ყ', 'q’', 'qʼ'],
-    ['ტ', 't’', 'tʼ'], ['კ', 'k’', 'kʼ'], ['პ', 'p’', 'pʼ'],
-    ['ჩ', 'ch', 'tʃ'], ['ც', 'ts', 'ts'], ['ძ', 'dz', 'dz'],
-    ['ხ', 'kh', 'x'], ['ჟ', 'zh', 'ʒ'], ['ღ', 'gh', 'ɣ'], ['შ', 'sh', 'ʃ'],
-    ['ჯ', 'j', 'dʒ'], ['თ', 't', 'tʰ'], ['ფ', 'p', 'pʰ'], ['ქ', 'k', 'kʰ'],
-    ['ა', 'a', 'ɑ'], ['ბ', 'b', 'b'], ['გ', 'g', 'g'], ['დ', 'd', 'd'], ['ე', 'e', 'ɛ'],
-    ['ვ', 'v', 'v'], ['ზ', 'z', 'z'], ['ი', 'i', 'i'], ['ლ', 'l', 'l'],
-    ['მ', 'm', 'm'], ['ნ', 'n', 'n'], ['ო', 'o', 'ɔ'], ['რ', 'r', 'r'],
-    ['ს', 's', 's'], ['უ', 'u', 'u'], ['ჰ', 'h', 'h']
-  ];
+  <script>
+    const fromGeorgianTable = [
+      ['წ', 'ts’', 'tsʼ'], ['ჭ', 'ch’', 'tʃʼ'], ['ყ', 'q’', 'qʼ'],
+      ['ტ', 't’', 'tʼ'], ['კ', 'k’', 'kʼ'], ['პ', 'p’', 'pʼ'],
+      ['ჩ', 'ch', 'tʃ'], ['ც', 'ts', 'ts'], ['ძ', 'dz', 'dz'],
+      ['ხ', 'kh', 'x'], ['ჟ', 'zh', 'ʒ'], ['ღ', 'gh', 'ɣ'], ['შ', 'sh', 'ʃ'],
+      ['ჯ', 'j', 'dʒ'], ['თ', 't', 'tʰ'], ['ფ', 'p', 'pʰ'], ['ქ', 'k', 'kʰ'],
+      ['ა', 'a', 'ɑ'], ['ბ', 'b', 'b'], ['გ', 'g', 'g'], ['დ', 'd', 'd'], ['ე', 'e', 'ɛ'],
+      ['ვ', 'v', 'v'], ['ზ', 'z', 'z'], ['ი', 'i', 'i'], ['ლ', 'l', 'l'],
+      ['მ', 'm', 'm'], ['ნ', 'n', 'n'], ['ო', 'o', 'ɔ'], ['რ', 'r', 'r'],
+      ['ს', 's', 's'], ['უ', 'u', 'u'], ['ჰ', 'h', 'h']
+    ];
 
-  function convert(mode) {
-    let input = document.getElementById("inputText").value;
-    let output = input;
+    function convert(mode) {
+      let input = document.getElementById("inputText").value;
+      let output = input;
 
-    if (mode === 'latin') {
-      fromGeorgianTable.forEach(([geo, lat]) => {
-        output = output.split(geo).join(lat);
-      });
-    } else if (mode === 'ipa') {
-      fromGeorgianTable.forEach(([geo, _, ipa]) => {
-        output = output.split(geo).join(ipa);
+      if (mode === 'latin') {
+        fromGeorgianTable.forEach(([geo, lat]) => {
+          output = output.split(geo).join(lat);
+        });
+      } else if (mode === 'ipa') {
+        fromGeorgianTable.forEach(([geo, _, ipa]) => {
+          output = output.split(geo).join(ipa);
+        });
+      }
+
+      document.getElementById("outputText").value = output;
+    }
+
+    function createKeyboard() {
+      const keyboardDiv = document.getElementById('georgianKeyboard');
+      const letters = fromGeorgianTable.map(([geo]) => geo);
+
+      letters.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.textContent = letter;
+        btn.onclick = () => {
+          const textarea = document.getElementById('inputText');
+          textarea.value += letter;
+          textarea.focus();
+        };
+        keyboardDiv.appendChild(btn);
       });
     }
 
-    document.getElementById("outputText").value = output;
-  }
-</script>
+    createKeyboard();
+  </script>
 </body>
 </html>
