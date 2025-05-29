@@ -75,33 +75,35 @@
     <textarea id="outputText" readonly placeholder="Output..."></textarea>
   </div>
 
-  <script>
-    const table = [
-      ['ა', 'a', 'ɑ'], ['ბ', 'b', 'b'], ['გ', 'g', 'g'], ['დ', 'd', 'd'], ['ე', 'e', 'ɛ'],
-      ['ვ', 'v', 'v'], ['ზ', 'z', 'z'], ['თ', "t'", 'tʼ'], ['ი', 'i', 'i'], ['კ', "k'", 'kʼ'],
-      ['ლ', 'l', 'l'], ['მ', 'm', 'm'], ['ნ', 'n', 'n'], ['ო', 'o', 'ɔ'], ['პ', "p'", 'pʼ'],
-      ['ჟ', 'zh', 'ʒ'], ['რ', 'r', 'r'], ['ს', 's', 's'], ['ტ', "t'", 'tʼ'], ['უ', 'u', 'u'],
-      ['ფ', 'p', 'pʰ'], ['ქ', 'k', 'kʰ'], ['ღ', 'gh', 'ɣ'], ['ყ', "q'", 'qʼ'], ['შ', 'sh', 'ʃ'],
-      ['ჩ', 'ch', 'tʃ'], ['ც', 'ts', 'ts'], ['ძ', 'dz', 'dz'], ['წ', "ts'", 'tsʼ'], ['ჭ', "ch'", 'tʃʼ'],
-      ['ხ', 'kh', 'x'], ['ჯ', 'j', 'dʒ'], ['ჰ', 'h', 'h']
-    ];
+<script>
+  const table = [
+    ['ტ', "t’", 'tʼ'], ['კ', "k’", 'kʼ'], ['პ', "p’", 'pʼ'],
+    ['წ', "ts’", 'tsʼ'], ['ჭ', "ch’", 'tʃʼ'], ['ყ', "q’", 'qʼ'], ['თ', "t’", 'tʼ'],
+    ['ფ', 'p', 'pʰ'], ['ქ', 'k', 'kʰ'],
+    ['ა', 'a', 'ɑ'], ['ბ', 'b', 'b'], ['გ', 'g', 'g'], ['დ', 'd', 'd'], ['ე', 'e', 'ɛ'],
+    ['ვ', 'v', 'v'], ['ზ', 'z', 'z'],
+    ['ი', 'i', 'i'], ['ლ', 'l', 'l'], ['მ', 'm', 'm'], ['ნ', 'n', 'n'], ['ო', 'o', 'ɔ'],
+    ['ჟ', 'zh', 'ʒ'], ['რ', 'r', 'r'], ['ს', 's', 's'], ['უ', 'u', 'u'],
+    ['ღ', 'gh', 'ɣ'], ['შ', 'sh', 'ʃ'], ['ჩ', 'ch', 'tʃ'], ['ც', 'ts', 'ts'], ['ძ', 'dz', 'dz'],
+    ['ხ', 'kh', 'x'], ['ჯ', 'j', 'dʒ'], ['ჰ', 'h', 'h']
+  ];
 
-    function convert(mode) {
-      let input = document.getElementById("inputText").value;
-      let output = input;
+  function convert(mode) {
+    let input = document.getElementById("inputText").value;
+    let output = input;
 
-      table.forEach(([geo, lat, ipa]) => {
-        if (mode === 'georgian') {
-          output = output.replaceAll(lat, geo).replaceAll(ipa, geo);
-        } else if (mode === 'latin') {
-          output = output.replaceAll(geo, lat).replaceAll(ipa, lat);
-        } else if (mode === 'ipa') {
-          output = output.replaceAll(geo, ipa).replaceAll(lat, ipa);
-        }
-      });
+    table.forEach(([geo, lat, ipa]) => {
+      if (mode === 'georgian') {
+        output = output.replaceAll(lat, geo).replaceAll(ipa, geo);
+      } else if (mode === 'latin') {
+        output = output.replaceAll(geo, lat).replaceAll(ipa, lat);
+      } else if (mode === 'ipa') {
+        output = output.replaceAll(geo, ipa).replaceAll(lat, ipa);
+      }
+    });
 
-      document.getElementById("outputText").value = output;
-    }
-  </script>
+    document.getElementById("outputText").value = output;
+  }
+</script>
 </body>
 </html>
